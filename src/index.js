@@ -26,8 +26,14 @@ const pool = mariadb.createPool(({
     ...config.mariadb,
     connectionLimit: 5,
 }));
+
 const getReviews = async (conn) => {
     return await conn.query("SELECT * FROM reviews");
+}
+
+const setReviews = async(conn, name, content)  => {
+    const query = await conn.query("INSERT INTO reviews (name, content) VALUES (?, ?);", [name, content]);
+    return query;
 }
 
 pool.getConnection().then(conn => {
@@ -43,6 +49,23 @@ pool.getConnection().then(conn => {
 
         res.send(reviews);
     });
+
+    app.post("/reviews", async (req, res) => {
+        const {name, content} = req.body;
+
+        if(name && content) {
+            const response = await setReviews(conn, name, content);
+
+            res.send(response);
+
+            return;
+        }
+
+        res.sendStatus(401);
+
+
+    });
+
     app.listen(config.port, config.host, () => {
             console.log(`Example app listening on port ${config.port}!`);
             console.log("started");
