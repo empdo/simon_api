@@ -32,8 +32,9 @@ const getReviews = async (conn) => {
 }
 
 const setReviews = async(conn, name, content)  => {
-    const query = await conn.query("INSERT INTO reviews (name, content) VALUES (?, ?);", [name, content]);
-    return query;
+    await conn.query("INSERT INTO reviews (name, content) VALUES (?, ?);", [name, content]);
+
+    return "Succes";
 }
 
 pool.getConnection().then(conn => {
@@ -53,10 +54,12 @@ pool.getConnection().then(conn => {
     app.post("/reviews", async (req, res) => {
         const {name, content} = req.body;
 
+        console.log(req.body);
+
         if(name && content) {
             const response = await setReviews(conn, name, content);
 
-            res.send(response);
+            res.sendStatus(200)
 
             return;
         }
