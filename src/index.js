@@ -8,10 +8,6 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-const pool = mariadb.createPool(({
-    ...config.mariadb,
-    connectionLimit: 5,
-}));
 
 export const config = {
     jwtSecret: process.env.JWT_SECRET || "",
@@ -26,7 +22,11 @@ export const config = {
     port: parseInt(process.env.PORT || "4678")
 };
 
-const getReviews = (conn) => {
+const pool = mariadb.createPool(({
+    ...config.mariadb,
+    connectionLimit: 5,
+}));
+const getReviews = async (conn) => {
     return await conn.query("SELECT * FROM reviews");
 }
 
