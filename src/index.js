@@ -10,7 +10,6 @@ app.use(express.json());
 
 
 export const config = {
-    jwtSecret: process.env.JWT_SECRET || "",
     host: process.env.HOST || "127.0.0.1",
     mariadb: {
         host: process.env.MARIADB_HOST || "127.0.0.1",
