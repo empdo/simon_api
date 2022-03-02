@@ -33,8 +33,6 @@ const getReviews = async (conn) => {
 
 const setReviews = async(conn, name, content)  => {
     await conn.query("INSERT INTO reviews (name, content) VALUES (?, ?);", [name, content]);
-
-    return "Succes";
 }
 
 pool.getConnection().then(conn => {
